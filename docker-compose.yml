@@ -59,7 +59,7 @@ services:
 
     entrypoint: /usr/bin/tini -- wait-for-it opensearch:9200 -- /docker-entrypoint.sh
     volumes:
-      - "graylog_data:/usr/share/graylog/config"
+      - "./config/graylog/graylog.conf:/usr/share/graylog/config/graylog.conf"
       - "graylog_data:/usr/share/graylog/data"
     restart: "on-failure"
     depends_on:
