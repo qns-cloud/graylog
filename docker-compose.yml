@@ -29,7 +29,7 @@ services:
       - "action.auto_create_index=false"
       - "plugins.security.ssl.http.enabled=false"
       - "plugins.security.disabled=true"
-      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=SetPassw0rdL3ttersAndNumb3r5"
+      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=1Aw4rdConsulting"
     volumes:
       - "log_data:/usr/share/opensearch/data"
     restart: "on-failure"
@@ -48,9 +48,9 @@ services:
     container_name: graylog
     environment:
       # CHANGE ME (must be at least 16 characters)!
-      GRAYLOG_PASSWORD_SECRET: "somepasswordpepper"
+      GRAYLOG_PASSWORD_SECRET: "!Aw4rdConsulting"
       # Password: admin
-      GRAYLOG_ROOT_PASSWORD_SHA2: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+      GRAYLOG_ROOT_PASSWORD_SHA2: "0fbf83ed3f8cf11cb36e293cc768c45760eb167fd09b3eb1f87507a3445c8f1b"
       GRAYLOG_HTTP_BIND_ADDRESS: "0.0.0.0:9001"
       GRAYLOG_HTTP_EXTERNAL_URI: "http://localhost:9001/"
       GRAYLOG_ELASTICSEARCH_HOSTS: "http://opensearch:9200"
