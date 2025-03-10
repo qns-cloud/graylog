@@ -23,11 +23,16 @@ services:
   mongo:
     image: mongo:6.0.5-jammy
     container_name: mongodb
+    command: --wiredTigerCacheSizeGB 1
     volumes:
       - "mongo_data:/data/db"
     restart: "on-failure"
     networks:
       - graylog_network
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 
   # The logs themselves are stored in Opensearch
   opensearch:
