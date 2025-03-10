@@ -8,6 +8,11 @@ volumes:
     driver: local
   graylog_data:
     driver: local
+
+# For Docker Swarm deployments
+configs:
+  graylog_config:
+    file: ./config/graylog/graylog.conf
 services:
   # Graylog stores configuration in MongoDB
   mongo:
@@ -59,8 +64,10 @@ services:
 
     entrypoint: /usr/bin/tini -- wait-for-it opensearch:9200 -- /docker-entrypoint.sh
     volumes:
-      - "./config/graylog/graylog.conf:/usr/share/graylog/config/graylog.conf"
       - "graylog_data:/usr/share/graylog/data"
+    configs:
+      - source: graylog_config
+        target: /usr/share/graylog/config/graylog.conf
     restart: "on-failure"
     depends_on:
       - opensearch
