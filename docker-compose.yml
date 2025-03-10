@@ -94,6 +94,8 @@ services:
       - 1515:1515/udp   # Syslog
       - 1516:1516/tcp   # Syslog
       - 1516:1516/udp   # Syslog
+      - 1517:1517/tcp   # Syslog
+      - 1517:1517/udp   # Syslog
       - 12201:12201/tcp # GELF
       - 12201:12201/udp # GELF
     networks:
