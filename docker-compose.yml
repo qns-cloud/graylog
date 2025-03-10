@@ -67,7 +67,7 @@ services:
       - "graylog_data:/usr/share/graylog/data"
     configs:
       - source: graylog_config
-        target: /usr/share/graylog/config/graylog.conf
+        target: /usr/share/graylog/data/config/graylog.conf
     restart: "on-failure"
     depends_on:
       - opensearch
