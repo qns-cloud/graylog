@@ -88,16 +88,16 @@ services:
       - mongo
     ports:
       - 9001:9001/tcp   # Graylog web interface and REST API
-      - 1514:1514/tcp   # Syslog
-      - 1514:1514/udp   # Syslog
-      - 1515:1515/tcp   # Syslog
-      - 1515:1515/udp   # Syslog
-      - 1516:1516/tcp   # Syslog
-      - 1516:1516/udp   # Syslog
-      - 1517:1517/tcp   # Syslog
-      - 1517:1517/udp   # Syslog
-      - 1518:1518/tcp   # Syslog
-      - 1518:1518/udp   # Syslog
+      - 1514:1514/udp   # Syslog - MVS
+      - 1515:1515/udp   # Syslog - ISC
+      - 1516:1516/udp   # Syslog - CFS
+      - 1517:1517/udp   # Syslog - MRS / UMG
+      - 1518:1518/udp   # Syslog - SAS
+      - 1519:1519/udp   # Syslog - EAS
+      - 1520:1520/udp   # Syslog - DCM
+      - 1521:1521/udp   # Syslog - RTR
+      - 1522:1522/udp   # Syslog - SWT
+      - 2055:2055/udp   # Netflow
       - 12201:12201/tcp # GELF
       - 12201:12201/udp # GELF
     networks:
