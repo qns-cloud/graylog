@@ -8,9 +8,6 @@ volumes:
     driver: local
   graylog_data:
     driver: local
-  graylog_config:
-    driver: local
-
 services:
   # Graylog stores configuration in MongoDB
   mongo:
@@ -62,7 +59,7 @@ services:
 
     entrypoint: /usr/bin/tini -- wait-for-it opensearch:9200 -- /docker-entrypoint.sh
     volumes:
-      - "graylog_config:/usr/share/graylog/config"
+      - "graylog_data:/usr/share/graylog/config"
       - "graylog_data:/usr/share/graylog/data"
     restart: "on-failure"
     depends_on:
