@@ -1,8 +1,4 @@
-version: '3'
-
-networks:
-  graynet:
-    driver: bridge
+version: '3.8'
 
 # This is how you persist data between container restarts
 volumes:
@@ -20,9 +16,7 @@ services:
     container_name: mongodb
     volumes:
       - "mongo_data:/data/db"
-    networks:
-      - graynet
-    restart: unless-stopped
+    restart: "on-failure"
 
   # The logs themselves are stored in Opensearch
   opensearch:
@@ -38,6 +32,7 @@ services:
       - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=SetPassw0rdL3ttersAndNumb3r5"
     volumes:
       - "log_data:/usr/share/opensearch/data"
+    restart: "on-failure"
     ulimits:
       memlock:
         soft: -1
@@ -47,9 +42,6 @@ services:
         hard: 65536
     ports:
       - 9200:9200/tcp
-    networks:
-      - graynet
-    restart: unless-stopped
 
   graylog:
     image: graylog/graylog:6.1
@@ -59,39 +51,23 @@ services:
       GRAYLOG_PASSWORD_SECRET: "somepasswordpepper"
       # Password: admin
       GRAYLOG_ROOT_PASSWORD_SHA2: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
-      GRAYLOG_HTTP_BIND_ADDRESS: "0.0.0.0:9000"
-      GRAYLOG_HTTP_EXTERNAL_URI: "http://localhost:9000/"
+      GRAYLOG_HTTP_BIND_ADDRESS: "0.0.0.0:9001"
+      GRAYLOG_HTTP_EXTERNAL_URI: "http://localhost:9001/"
       GRAYLOG_ELASTICSEARCH_HOSTS: "http://opensearch:9200"
       GRAYLOG_MONGODB_URI: "mongodb://mongodb:27017/graylog"
-      GRAYLOG_TIMEZONE: "America/Detroit"
-      TZ: "America/Detroit"
-      GRAYLOG_TRANSPORT_EMAIL_PROTOCOL: "smtp"
-      GRAYLOG_TRANSPORT_EMAIL_WEB_INTERFACE_URL: "http://192.168.3.233:9000/"
-      GRAYLOG_TRANSPORT_EMAIL_HOSTNAME: "outbound.mailhop.org"
-      GRAYLOG_TRANSPORT_EMAIL_ENABLED: "true"
-      GRAYLOG_TRANSPORT_EMAIL_PORT: "587"
-      GRAYLOG_TRANSPORT_EMAIL_USE_AUTH: "true"
-      GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME: "xxxxx"
-      GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD: "xxxxx"
-      GRAYLOG_TRANSPORT_EMAIL_USE_TLS: "true"
-      GRAYLOG_TRANSPORT_EMAIL_USE_SSL: "false"
-      GRAYLOG_TRANSPORT_FROM_EMAIL: "graylog@example.com"
-      GRAYLOG_TRANSPORT_SUBJECT_PREFIX: "[graylog]"
+      GRAYLOG_TIMEZONE: "America/Chicago"
+      TZ: "America/Chicago"
 
     entrypoint: /usr/bin/tini -- wait-for-it opensearch:9200 -- /docker-entrypoint.sh
     volumes:
       - "${PWD}/config/graylog/graylog.conf:/usr/share/graylog/config/graylog.conf"
       - "graylog_data:/usr/share/graylog/data"
-    networks:
-      - graynet
-    restart: always
+    restart: "on-failure"
     depends_on:
-      opensearch:
-        condition: "service_started"
-      mongo:
-        condition: "service_started"
+      - opensearch
+      - mongo
     ports:
-      - 9000:9000/tcp   # Graylog web interface and REST API
+      - 9001:9001/tcp   # Graylog web interface and REST API
       - 1514:1514/tcp   # Syslog
       - 1514:1514/udp   # Syslog
       - 12201:12201/tcp # GELF
