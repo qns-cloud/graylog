@@ -4,10 +4,22 @@ version: '3.8'
 volumes:
   mongo_data:
     driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data/mongodb
+      o: bind
   log_data:
     driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data/opensearch
+      o: bind
   graylog_data:
     driver: local
+    driver_opts:
+      type: none
+      device: ${PWD}/data/graylog
+      o: bind
 
 # Define an overlay network for service discovery in Swarm
 networks:
