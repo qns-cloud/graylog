@@ -54,8 +54,13 @@ To deploy this stack using Portainer:
      - **Repository URL**: Your GitHub repository URL
      - **Repository Reference**: The branch (e.g., main, master)
      - **Compose Path**: docker-compose.yml
-     - **Orchestrator**: Select **Swarm** (not Compose)
+     - **Orchestrator**: Select **Swarm** (not Compose) - this is critical!
    - Click "Deploy the stack"
+
+> **Important Notes:**
+> - Make sure the repository contains the `config/graylog/graylog.conf` file
+> - The stack must be deployed as a Swarm stack, not a Compose stack
+> - The data directories must exist before deployment
 
 Access graylog at http://your-server-ip:9001 (replace with your actual server IP)
 

@@ -29,7 +29,7 @@ networks:
 # For Docker Swarm deployments
 configs:
   graylog_config:
-    file: /opt/Workspace/graylog/config/graylog/graylog.conf
+    file: ./config/graylog/graylog.conf
 services:
   # Graylog stores configuration in MongoDB
   mongo:
@@ -37,13 +37,14 @@ services:
     command: --wiredTigerCacheSizeGB 1
     volumes:
       - "mongo_data:/data/db"
-    restart: "on-failure"
-    networks:
-      - graylog_network
     deploy:
+      restart_policy:
+        condition: on-failure
       resources:
         limits:
           memory: 2G
+    networks:
+      - graylog_network
 
   # The logs themselves are stored in Opensearch
   opensearch:
@@ -58,7 +59,9 @@ services:
       - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=1Aw4rdConsulting"
     volumes:
       - "log_data:/usr/share/opensearch/data"
-    restart: "on-failure"
+    deploy:
+      restart_policy:
+        condition: on-failure
     ulimits:
       memlock:
         soft: -1
@@ -91,7 +94,9 @@ services:
     configs:
       - source: graylog_config
         target: /usr/share/graylog/data/config/graylog.conf
-    restart: "on-failure"
+    deploy:
+      restart_policy:
+        condition: on-failure
     ports:
       - 9001:9001/tcp   # Graylog web interface and REST API
       - 1514:1514/udp   # Syslog - MVS
