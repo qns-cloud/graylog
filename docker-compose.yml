@@ -6,19 +6,19 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/data/mongodb
+      device: /var/lib/docker/volumes/graylog_mongodb
       o: bind
   log_data:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/data/opensearch
+      device: /var/lib/docker/volumes/graylog_opensearch
       o: bind
   graylog_data:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/data/graylog
+      device: /var/lib/docker/volumes/graylog_graylog
       o: bind
 
 # Define an overlay network for service discovery in Swarm
@@ -29,12 +29,11 @@ networks:
 # For Docker Swarm deployments
 configs:
   graylog_config:
-    file: ./config/graylog/graylog.conf
+    file: /opt/Workspace/graylog/config/graylog/graylog.conf
 services:
   # Graylog stores configuration in MongoDB
   mongo:
     image: mongo:6.0.5-jammy
-    container_name: mongodb
     command: --wiredTigerCacheSizeGB 1
     volumes:
       - "mongo_data:/data/db"
@@ -49,7 +48,6 @@ services:
   # The logs themselves are stored in Opensearch
   opensearch:
     image: opensearchproject/opensearch:2
-    container_name: opensearch
     environment:
       - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
       - "bootstrap.memory_lock=true"
@@ -75,7 +73,6 @@ services:
 
   graylog:
     image: graylog/graylog:6.1
-    container_name: graylog
     environment:
       # CHANGE ME (must be at least 16 characters)!
       GRAYLOG_PASSWORD_SECRET: "!Aw4rdConsulting"
@@ -95,9 +92,6 @@ services:
       - source: graylog_config
         target: /usr/share/graylog/data/config/graylog.conf
     restart: "on-failure"
-    depends_on:
-      - opensearch
-      - mongo
     ports:
       - 9001:9001/tcp   # Graylog web interface and REST API
       - 1514:1514/udp   # Syslog - MVS

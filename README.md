@@ -12,6 +12,8 @@ This setup uses bind mounts to ensure data persistence between container restart
 
 # Usage
 
+## Local Deployment
+
 Before starting the containers for the first time, run the setup script to create the necessary directories:
 
 ```
@@ -25,7 +27,37 @@ Then start the Graylog stack:
 docker compose up
 ```
 
-Access graylog [here.](http://localhost:9001)
+## Portainer Deployment
+
+To deploy this stack using Portainer:
+
+1. Ensure Docker Swarm is initialized on your host:
+   ```
+   docker swarm init
+   ```
+
+2. Create the necessary data directories on the host:
+   ```
+   mkdir -p /var/lib/docker/volumes/graylog_mongodb
+   mkdir -p /var/lib/docker/volumes/graylog_opensearch
+   mkdir -p /var/lib/docker/volumes/graylog_graylog
+   chmod 777 /var/lib/docker/volumes/graylog_mongodb
+   chmod 777 /var/lib/docker/volumes/graylog_opensearch
+   chmod 777 /var/lib/docker/volumes/graylog_graylog
+   ```
+
+3. In Portainer:
+   - Go to Stacks > Add Stack
+   - Choose "Git Repository" as the build method
+   - Set the following parameters:
+     - **Name**: graylog (or your preferred stack name)
+     - **Repository URL**: Your GitHub repository URL
+     - **Repository Reference**: The branch (e.g., main, master)
+     - **Compose Path**: docker-compose.yml
+     - **Orchestrator**: Select **Swarm** (not Compose)
+   - Click "Deploy the stack"
+
+Access graylog at http://your-server-ip:9001 (replace with your actual server IP)
 
 > **Note:** The web interface is available on port 9001, not 9000 as previously mentioned.
 
