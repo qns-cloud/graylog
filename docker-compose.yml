@@ -3,23 +3,8 @@ version: '3.8'
 # This is how you persist data between container restarts
 volumes:
   mongo_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /var/lib/docker/volumes/graylog_mongodb
-      o: bind
   log_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /var/lib/docker/volumes/graylog_opensearch
-      o: bind
   graylog_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /var/lib/docker/volumes/graylog_graylog
-      o: bind
 
 # Define an overlay network for service discovery in Swarm
 networks:

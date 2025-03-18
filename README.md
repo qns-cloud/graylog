@@ -36,17 +36,7 @@ To deploy this stack using Portainer:
    docker swarm init
    ```
 
-2. Create the necessary data directories on the host:
-   ```
-   mkdir -p /var/lib/docker/volumes/graylog_mongodb
-   mkdir -p /var/lib/docker/volumes/graylog_opensearch
-   mkdir -p /var/lib/docker/volumes/graylog_graylog
-   chmod 777 /var/lib/docker/volumes/graylog_mongodb
-   chmod 777 /var/lib/docker/volumes/graylog_opensearch
-   chmod 777 /var/lib/docker/volumes/graylog_graylog
-   ```
-
-3. In Portainer:
+2. In Portainer:
    - Go to Stacks > Add Stack
    - Choose "Git Repository" as the build method
    - Set the following parameters:
@@ -60,7 +50,7 @@ To deploy this stack using Portainer:
 > **Important Notes:**
 > - Make sure the repository contains the `config/graylog/graylog.conf` file
 > - The stack must be deployed as a Swarm stack, not a Compose stack
-> - The data directories must exist before deployment
+> - Docker will automatically create and manage volumes for data persistence
 
 Access graylog at http://your-server-ip:9001 (replace with your actual server IP)
 
